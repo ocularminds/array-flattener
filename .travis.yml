@@ -3,14 +3,8 @@ script: gradle clean build
 install:
   - gradle test
 script:
-  - gradle test jacoco:report
 after_success:
-  - gradle coveralls:report
-  - sh ./.travis/artifact-upload.sh 
   
 jdk: oraclejdk8
  
-env:
-  global:
-  - secure: L2lr/F0gIvyVUl0nJ7w9saGV7wZkL6nO61IxilDY/76iTlnhrFXn5Q8vATGbiRYdDW/tG1kyDUbKaWSkYrpV2Agm4wV/KmMg2CWRiIcQPPqwSEENx/1UZ/dBnCQGcRkkYApu5ayjGnX3Srg3ty1zvdud/O8tiKtWkkBDipJSpfY=
-  - secure: OekVM5ZyLGHpqurOUWJcq0kKBA78WKZdXaA9aylwrjjQFeVoZxyxeZTYbhLajN4Ggg4Th58QwjUHpwcgZlnsxx4heDo1wyHxXojJd0H1LWKXJwet82IXaFJbl+Yz/htr7uWSFTUF6Szx70cpMxlGe3qsIFlgViEo9UGhHHdrjdY=
+repo_token: BY4EoH4btivMXxdaOAhbPMaBtbpGrmdAe
