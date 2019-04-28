@@ -1,6 +1,8 @@
 # array-flattener
 Production ready Flattener for array of arbitrarily nested arrays of integers into a flat array of integers
 
+[![Coverage Status](https://coveralls.io/repos/github/ocularminds/array-flattener/badge.svg?branch=master)](https://coveralls.io/github/ocularminds/array-flattener?branch=master)
+
 Use Case:
 ```java
 
