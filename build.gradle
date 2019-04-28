@@ -1,21 +1,20 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://plugins.gradle.org/m2/"}
     }
-    
     dependencies {
-        classpath('com.github.ksoichiro:gradle-console-reporter:0.6.2')
+        classpath 'com.github.ksoichiro:gradle-console-reporter:0.6.2'
     }
 }
 
-apply plugin: 'java'
-apply plugin: "jacoco"
+plugins {
+    id  'java'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
+}
+
 apply plugin: 'com.github.ksoichiro.console.reporter'
 
 group = 'arrays'
@@ -47,31 +46,16 @@ test{
 
 tasks.withType(Test) {
     testLogging {
-        // set options for log level LIFECYCLE
-        events TestLogEvent.FAILED,
-        TestLogEvent.PASSED,
-        TestLogEvent.SKIPPED,
-        TestLogEvent.STANDARD_OUT
+        events "passed", "skipped", "failed", "standardOut", "standardError"
         exceptionFormat TestExceptionFormat.FULL
         showExceptions true
         showCauses true
         showStackTraces true
-
-        // set options for log level DEBUG and INFO
-        debug {
-            events TestLogEvent.STARTED,
-            TestLogEvent.FAILED,
-            TestLogEvent.PASSED,
-            TestLogEvent.SKIPPED,
-            TestLogEvent.STANDARD_ERROR,
-            TestLogEvent.STANDARD_OUT
-            exceptionFormat TestExceptionFormat.FULL
-        }
         info.events = debug.events
         info.exceptionFormat = debug.exceptionFormat
 
         afterSuite { desc, result ->
-            if (!desc.parent) { // will match the outermost suite
+            if (!desc.parent) { 
                 def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
                 def startItem = '|  ', endItem = '  |'
                 def repeatLength = startItem.length() + output.length() + endItem.length()
@@ -103,5 +87,31 @@ jacocoTestCoverageVerification {
     }
 }
 
-check.dependsOn jacocoTestCoverageVerification
+consoleReporter {
+    junit {
+        enabled true
+        reportOnFailure true
+        summaryEnabled true
+        stdoutEnabled true
+        stderrEnabled true
+        stacktraceEnabled true
+        colorEnabled true
+        partialSourceInsertionEnabled true
+    }
+
+    jacoco {
+        enabled true
+        onlyWhenCoverageTaskExecuted true
+        reportAfterBuildFinished true
+        autoconfigureCoverageConfig true
+        coverageTaskName 'jacocoTestReport'      
+        colorEnabled true
+    }
+}
+
+coveralls{
+    service = 'travis-ci'
+    
+}
+check.dependsOn(jacocoTestCoverageVerification)
 test.finalizedBy jacocoTestReport
