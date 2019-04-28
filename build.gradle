@@ -7,14 +7,18 @@ buildscript {
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
     }
+    
     dependencies {
         classpath('com.github.ksoichiro:gradle-console-reporter:0.5.0')
+        classpath('com.github.kt3k.coveralls:2.8.2')
     }
 }
 
 apply plugin: 'java'
 apply plugin: "jacoco"
 apply plugin: 'com.github.ksoichiro.console.reporter'
+apply plugin: 'com.github.kt3k.coveralls'
+
 group = 'arrays'
 version = '0.0.1'
 description = """ Flattener for array of arbitrarily nested arrays of integers into a flat array of integers"""
